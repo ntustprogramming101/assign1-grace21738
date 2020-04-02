@@ -10,7 +10,8 @@ int randRobot,randSoldier;
 float hogX , hogY , hogSpeed;
 float soldierX=0.0, soldierY , soldierSpeed;
 float robotX , robotY , robotSpeed;
-float laserX, laserSpeed;
+float laserEndX, laserSpeed , laserLength;
+float laserStartY,laserStartX , laserRestart,laserRestartX;
 
 
 
@@ -37,7 +38,12 @@ void setup() {
   
   //laser
   laserSpeed = floor(random(1,5));
-  laserX = robotX+40+laserSpeed;
+  laserStartY = robotY + 37;
+  laserStartX = robotX+25 ;
+  laserEndX = laserStartX-1;
+  laserLength = 35;
+  
+  laserRestartX = laserStartX;
   
 }
 
@@ -70,20 +76,24 @@ void draw() {
     soldierX = -100;
   }
   
-  
-  //laser
-  if( laserX>robotX-160 ){
-    fill( 255,62,28 );
-    ellipse( laserX,robotY+37, 10,10);
-    ellipse( laserX+3,robotY+37, 10,10);
-    ellipse( laserX+6,robotY+37, 10,10);
-    ellipse( laserX+9,robotY+37, 10,10);
-    ellipse( laserX+12,robotY+37, 10,10);
-    ellipse( laserX+15,robotY+37, 10,10);
-    laserX -= laserSpeed;
-  }else{
-    laserX = robotX+40+laserSpeed;
-  }
   //robot
   image( robot,robotX,robotY );
+  
+  //laser
+    strokeWeight(10);
+    stroke(255,0,0);
+    line(laserStartX, laserStartY, laserEndX, laserStartY);
+    laserEndX -=2;
+    
+    //action of laser
+    if(laserStartX-laserEndX == laserLength){
+      laserStartX -= 2;
+    }
+    
+    //two blocks then return
+    if (laserEndX <= robotX-125){
+      laserEndX = laserRestartX-1;
+      laserStartX = laserRestartX;
+    }
+     
 }
